@@ -1,0 +1,70 @@
+% http://tex.stackexchange.com/questions/94025/displaying-genetic-algorithms-on-data
+
+\documentclass[tikz,convert=false]{standalone}
+\usetikzlibrary{chains}
+\makeatletter
+\tikzset{
+  on chain/.append code={
+    \ifnum\c@pgf@counta=1\relax
+      \tikzset{every first on chain/.try}%
+    \fi
+  },
+  start chain/.append code={%
+    \edef\pgf@marshal{\noexpand\tikzset{execute at end scope={\noexpand\xdef\noexpand\tikzpreviouschain{\tikz@lib@chain@name}}}}%
+    \pgf@marshal
+  }
+}
+\def\listset{\pgfqkeys{/List}}
+\tikzset{
+  raw sort entry/.style={rectangle, thick, draw, font=\strut,text depth=+0pt,minimum width=+1.2em, inner xsep=+0pt},
+  sort entry black/.style={raw sort entry, black, fill=white},
+  sort entry blackgray/.style={raw sort entry, black, fill=gray!25},
+  s1/.style={raw sort entry, fill=yellow!30},
+  s2/.style={raw sort entry, fill=green!20},
+  s3/.style={raw sort entry, fill=orange!25},
+  g/.style={raw sort entry, fill=lightgray}
+}
+\listset{
+  chain name/.initial=,
+  do/.style={
+    /utils/exec={\begin{scope}[start chain=\pgfkeysvalueof{/List/chain name}]},
+    int/do/.list={#1},
+    /utils/exec=\end{scope},
+  },
+  int/do/.code={%
+    \pgfutil@ifnextchar[\tikz@List@int@@do{\tikz@List@int@@do[]}#1\pgf@stop
+  }
+}
+\def\tikz@List@int@@do[#1]#2\pgf@stop{%
+  \node[on chain={\pgfkeysvalueof{/List/chain name}},#1] {#2};
+}
+\begin{document}
+\begin{tikzpicture}[
+  node distance=+1em and +0pt,
+  outer xsep=+0pt,
+  outer ysep=+0pt,
+  every node/.append style={raw sort entry}
+]
+ \listset{chain name=r1,do={1, [g]z, 1, 1, 1, [s1]2, [s2]2, [s3]2, 3, 3, 1, 1, [g]y, 1, 1, [s3]2, [s1]2, [s2]2, 3, 3}}
+ \tikzset{every first on chain/.style={below=of \tikzpreviouschain-begin}}
+ \listset{chain name=r2, do={1, 1, [g]y, 1, 1, [s3]2, [s1]2, [s2]2, 3, 3, 1, 1, 1, [g]x, 1, [s2]2, [s3]2, [s1]2, 3, 3}}
+ \listset{chain name=r3, do={1, 1, 1, [g]x, 1, [s2]2, [s3]2, [s1]2, 3, 3, 1, [g]z, 1, 1, 1, [s1]2, [s2]2, [s3]2, 3, 3}}
+
+ \foreach \chain in {r1, r2, r3}{
+   \draw[thick, densely dotted] (\chain-begin.north west) -- ++ (left:10pt)
+                                (\chain-begin.south west) -- ++ (left:10pt)
+                                (\chain-end.north east) -- ++ (right:10pt)
+                                (\chain-end.south east) -- ++ (right:10pt)
+   ;
+ }
+ \foreach \column in {0,5,10,...,20}{
+   \ifnum\column=0
+     \draw[dash pattern=on \pgflinewidth off \pgflinewidth] ([yshift=1em]r1-begin.north west) -- ([yshift=-1em]r3-begin.south west);
+   \else\ifodd\column
+       \draw[densely dotted] ([yshift=.75em]r1-\column.north east) -- ([yshift=-.75em]r3-\column.south east);
+     \else
+       \draw[dash pattern=on \pgflinewidth off \pgflinewidth] ([yshift=1em]r1-\column.north east) -- ([yshift=-1em]r3-\column.south east);
+     \fi
+   \fi}
+\end{tikzpicture}
+\end{document}

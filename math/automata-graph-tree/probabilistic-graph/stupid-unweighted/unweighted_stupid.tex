@@ -1,0 +1,62 @@
+% Source: http://tex.stackexchange.com/a/331141/6880
+
+\documentclass[border=10pt,multi,tikz]{standalone}
+\usepackage{forest}
+\useforestlibrary{linguistics}
+\forestset{%
+  declare count={connections}{1},
+}
+\begin{document}
+\begin{forest}
+  for tree={%
+    sn edges,
+    grow'=0,
+    l=2.5cm,
+    s sep=0.2cm,
+    anchor=parent,
+  },
+  before typesetting nodes={%
+    where connections=1{}{%
+      if={isodd(connections())}{%
+        edge path'={%
+          foreach \i [count=\j from 0, evaluate=\noexpand\j as \noexpand\k using \noexpand { (\j==0) ? 0pt :((isodd(\j)) ? (\j*2.5pt) : ((-\j+1)*2.5pt)) }
+          ]
+          in {1,...,\foresteoption{connections}} { (!u.parent anchor) -- ([yshift=\noexpand\k].child anchor)  }
+        },
+      }{%
+        edge path'={%
+          foreach \i [count=\j, evaluate=\noexpand\j as \noexpand\k using \noexpand { (isodd(\j)) ? (\j*2.5pt) : ((-\j+1)*2.5pt) }
+          ]
+          in {1,...,\foresteoption{connections}} { (!u.parent anchor) -- ([yshift=\noexpand\k].child anchor)  }
+        },
+      },
+    },
+  },
+  [
+    [O, connections=6
+      [R
+        [T]
+      ]
+      [T, connections=6
+        [R]
+      ]
+    ]
+    [R, connections=4
+      [O
+        [T]
+      ]
+      [T, connections=4
+        [O]
+      ]
+    ]
+    [T, connections=3
+      [O
+        [R]
+      ]
+      [R
+        [O]
+      ]
+    ]
+  ]
+\end{forest}
+\end{document}

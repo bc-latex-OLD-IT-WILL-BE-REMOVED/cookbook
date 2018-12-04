@@ -1,0 +1,67 @@
+% Source : http://forum.mathematex.net/latex-f6/redimensionner-un-graphique-fait-avec-tikz-t11824.html#p114426
+
+\documentclass{article}
+	\usepackage[utf8x]{inputenc}
+	\usepackage[french]{babel}
+	\usepackage[T1]{fontenc}
+	\usepackage{tikz}
+	\usetikzlibrary{shapes}
+
+
+\begin{document}
+
+\begin{tikzpicture}[every node/.style={scale=0.75},scale=0.75]
+	\tikzstyle{debutfin}=[ellipse,draw,thick,text=red]
+	\tikzstyle{es}=[rectangle,draw,rounded corners=4pt,fill=blue!25]
+	\tikzstyle{inst}=[rectangle,draw,fill=yellow!50]
+	\tikzstyle{test}=[diamond,aspect=1.5,thick,draw=blue,fill=yellow!50]
+	\tikzstyle{fleche}=[->,>=stealth,thick,rounded corners=0pt]
+	\node[debutfin](debut) at (5,10.5){Début};
+	\node[es](lire) at (5,9){
+		\begin{tabular}{c}
+			On a deux nombres.
+		\end{tabular}%
+	};
+	\node[inst](inst1) at (5,7.5){
+		\begin{tabular}{c}
+			On divise le plus grand \\
+			par le plus petit.
+		\end{tabular}%
+	};
+	\node[test](test) at (5,4.5){
+		\begin{tabular}{c}
+			Le reste \\
+			vaut-il \\
+			zéro ?
+		\end{tabular}%
+	};
+	\node[inst](inst2) at (1,2){
+		\begin{tabular}{c}
+			On divise le diviseur \\
+			par le reste.
+		\end{tabular}%
+	};
+	\node[inst](inst3) at (9,2){
+		\begin{tabular}{c}
+			Le diviseur \\
+			(ou le reste précédent) \\
+			est le PGCD cherché.
+		\end{tabular}%
+	};
+	\node[es](afficher) at (5,0){
+		\begin{tabular}{c}
+			Afficher le PGCD.
+		\end{tabular}%
+	};
+	\node[debutfin](fin) at (5,-1.5){Fin};
+	\draw[fleche](debut)--(lire);
+	\draw[fleche](lire)--(inst1);
+	\draw[fleche](inst1)--(test);
+	\draw[fleche] (test) -| (inst2) node [ellipse,near start,fill=red!50]{non};
+	\draw[fleche] (test) -| (inst3) node [ellipse,near start,fill=red!50]{oui};
+	\draw[fleche] (inst3.180) -| (afficher.90);
+	\draw[fleche](afficher)--(fin);
+	\draw[fleche] (inst2.135) |- (test.135);
+\end{tikzpicture}
+
+\end{document}

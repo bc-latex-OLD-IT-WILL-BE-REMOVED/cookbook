@@ -1,0 +1,97 @@
+% Source : http://tex.stackexchange.com/questions/35881/circle-around-content-of-a-table-is-it-possible
+
+\documentclass{report}
+	\usepackage{tikz}
+	\usetikzlibrary{calc}
+
+	\def\startCirc#1{%
+		\tikz[remember picture,overlay]
+		\path node[inner sep=0, anchor=south] (st) {\textbf{#1}} coordinate (start) at (st.center);%
+	}%
+	\def\endCirc#1{%
+		\tikz[remember picture,overlay]
+		\path node[inner sep=0, anchor=south] (en) {\textbf{#1}} coordinate (end) at (en.center);%
+		\begin{tikzpicture}[overlay, remember picture]%
+			\path (start);%
+			\pgfgetlastxy{\startx}{\starty}%
+			\path (end);%
+			\pgfgetlastxy{\endx}{\endy}%
+			\pgfmathsetlengthmacro{\xdiff}{\endx-\startx}%
+			\pgfmathsetlengthmacro{\ydiff}{\endy-\starty}%
+			\pgfmathtruncatemacro{\xdifft}{\xdiff}%
+			\pgfmathsetmacro{\xdiffFixed}{ifthenelse(equal(\xdifft,0),1,\xdiff)}%
+			\pgfmathsetmacro{\angle}{ifthenelse(equal(\xdiffFixed,1),90,atan(\ydiff/\xdiffFixed))}%
+			\pgfmathsetlengthmacro{\xydiff}{sqrt(abs(\xdiff^2) + abs(\ydiff^2))}%
+			\path node[draw,rectangle, rounded corners=2mm, dashed, rotate=\angle, minimum width=\xydiff+4ex, minimum height=2.5ex] at ($(start)!.5!(end)$) {};%
+		\end{tikzpicture}%
+	}
+
+
+\begin{document}
+
+\noindent
+\begin{tabular}{c | c | c | c | c}
+	E & G & P & A & L\\
+	\hline
+	I & I & U & G & F\\
+	\hline
+	G & A & F & Z & U\\
+	\hline
+	\startCirc{H} & R & T & U & Z\\
+	\hline
+	\textbf{A} & I & N & F & H\\
+	\hline
+	\textbf{U} & I & A & C & T\\
+	\hline
+	\endCirc{S} & N & E & R & Z\\
+\end{tabular}
+\quad
+\begin{tabular}{c | c | c | c | c}
+	E & G & P & A & L\\
+	\hline
+	I & I & U & G & F\\
+	\hline
+	G & A & F & Z & U\\
+	\hline
+	\startCirc{H} & \textbf{A} & \textbf{U} & \endCirc{S} & Z\\
+	\hline
+	L & I & N & F & H\\
+	\hline
+	G & I & A & C & T\\
+	\hline
+	D & N & E & R & Z\\
+\end{tabular}
+\quad
+\begin{tabular}{c | c | c | c | c}
+	E & G & P & A & L\\
+	\hline
+	I & I & U & G & F\\
+	\hline
+	G & A & F & Z & U\\
+	\hline
+	\startCirc{H} & B & R & T & Z\\
+	\hline
+	L & \textbf{A} & N & F & H\\
+	\hline
+	G & I & \textbf{U} & C & T\\
+	\hline
+	D & N & E & \endCirc{S} & Z\\
+\end{tabular}
+\quad
+\begin{tabular}{c | c | c | c | c}
+	E & G & P & A & L\\
+	\hline
+	I & I & U & G & F\\
+	\hline
+	G & A & F & Z & U\\
+	\hline
+	H & B & R & T & \startCirc{Z}\\
+	\hline
+	L & A & N & \textbf{F} & H\\
+	\hline
+	G & I & \textbf{U} & C & T\\
+	\hline
+	D & \endCirc{N} & E & S & Z\\
+\end{tabular}
+
+\end{document}

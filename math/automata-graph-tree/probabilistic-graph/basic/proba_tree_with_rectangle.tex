@@ -1,0 +1,45 @@
+% Source: http://tex.stackexchange.com/a/329452/6880
+
+\documentclass[margin=10pt]{standalone}
+\usepackage{forest}
+\useforestlibrary{linguistics}
+\usetikzlibrary{fit}
+
+\begin{document}
+\begin{forest}
+    for tree = {
+        sn edges,
+        grow'=0,
+        l=2.5cm,
+        s sep=0.2cm,
+        anchor=west,
+        child anchor=west}
+  [
+    [O,name=left
+      [R
+        [T,name=topright]
+      ]
+      [T
+        [R,name=bottomright]
+      ]
+    ]
+    [R
+      [O
+        [T]
+      ]
+      [T
+        [O]
+      ]
+    ]
+    [T
+      [O
+        [R]
+      ]
+      [R
+        [O]
+      ]
+    ]
+  ]
+\node[draw=red,thick,fit=(left)(topright)(bottomright)] {};
+\end{forest}
+\end{document}

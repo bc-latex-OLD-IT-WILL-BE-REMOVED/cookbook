@@ -1,0 +1,84 @@
+% Source: https://groups.google.com/forum/#!topic/fr.comp.text.tex/hfKZtdTbzB0
+
+\documentclass{article} 
+\usepackage{etex} 
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc} 
+\usepackage[frenchb]{babel} 
+\usepackage{graphicx} 
+\usepackage{xcolor} 
+\usepackage{tikz} 
+
+\begin{document} 
+\begin{tikzpicture} 
+  \tikzset{ 
+    fix node/.style={ 
+      execute at begin node={\vphantom{A,}}, 
+      execute at end node={\vphantom{A,}}, 
+    }, 
+    every node/.style={fix node,font=\footnotesize}, 
+    grow=right, 
+    level 1/.style={sibling distance=8em}, 
+    level 2/.style={sibling distance=6em}, 
+    level 3/.style={sibling distance=4em}, 
+    level 4/.style={sibling distance=2em}, 
+    level distance=2.5cm, 
+    etiq/.style={
+    		text=blue,
+    		fill=white,
+    		sloped, % Pencher
+    		pos=.5
+	}, 
+    poids/.style={label={[text=red,inner sep=0]right:$\bullet$ #1}}, 
+  } 
+  \coordinate % root 
+  child { node {SS} 
+    child { node {SS} 
+      child { node {SS} 
+        child { node[poids={0,2500}]{SS} 
+          edge from parent node[etiq] {1}} 
+        edge from parent node[etiq] {1}} 
+      edge from parent node[etiq] {1}} 
+    edge from parent node[etiq] {0,25}} 
+  child { node {RS} 
+    child { node {SS} 
+      child { node {SS} 
+        child { node[poids={0,1250}]{SS} 
+          edge from parent node[etiq] {1}} 
+        edge from parent node[etiq] {1}} 
+      edge from parent node[etiq] {0,25}} 
+    child { node {RS} 
+      child { node {SS} 
+        child { node[poids={0,0625}]{SS} 
+          edge from parent node[etiq] {1}} 
+        edge from parent node[etiq] {0,25}} 
+      child { node {RS} 
+        child { node[poids={0,03125}] {SS} 
+          edge from parent node[etiq] {0,25}} 
+        child { node[poids={0,0625}] {RS} 
+          edge from parent node[etiq] {0,5}} 
+        child { node[poids={0,03125}] {RR} 
+          edge from parent node[etiq] {0,25}} 
+        edge from parent node[etiq] {0,5}} 
+      child { node {RR} 
+        child { node[poids={0,0625}] {RR} 
+          edge from parent node[etiq] {1}} 
+        edge from parent node[etiq] {0,25}} 
+      edge from parent node[etiq] {0,5}} 
+    child { node {RR} 
+      child { node {RR} 
+        child { node[poids={0,1250}] {RR} 
+          edge from parent node[etiq] {1}} 
+        edge from parent node[etiq] {1}} 
+      edge from parent node[etiq] {0,25}} 
+    edge from parent node[etiq] {0,5}} 
+  child { node {RR} 
+    child { node {RR} 
+      child { node {RR} 
+        child { node[poids={0,2500}] {RR} 
+          edge from parent node[etiq] {1}} 
+        edge from parent node[etiq] {1}} 
+      edge from parent node[etiq] {1}} 
+    edge from parent node[etiq] {0,25}}; 
+\end{tikzpicture} 
+\end{document} 

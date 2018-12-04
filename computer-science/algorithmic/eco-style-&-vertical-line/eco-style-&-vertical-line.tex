@@ -1,0 +1,71 @@
+% Source : http://tex.stackexchange.com/questions/52473/is-it-possible-to-have-connecting-loop-lines-like-algorithm2e-in-algorithmic
+
+\documentclass{article}
+	\usepackage{algorithm}
+	\usepackage{algpseudocode}
+
+	\makeatletter
+% This is the vertical rule that is inserted
+		\def\therule{\makebox[\algorithmicindent][l]{\hspace*{.5em}\vrule height .75\baselineskip depth .25\baselineskip}}%
+
+		\newtoks\therules% Contains rules
+		\therules={}% Start with empty token list
+		\def\appendto#1#2{\expandafter#1\expandafter{\the#1#2}}% Append to token list
+		\def\gobblefirst#1{% Remove (first) from token list
+			#1\expandafter\expandafter\expandafter{\expandafter\@gobble\the#1}}%
+		\def\LState{\State\unskip\the\therules}% New line-state
+		\def\pushindent{\appendto\therules\therule}%
+		\def\popindent{\gobblefirst\therules}%
+		\def\printindent{\unskip\the\therules}%
+		\def\printandpush{\printindent\pushindent}%
+		\def\popandprint{\popindent\printindent}%
+
+%      ***      DECLARED LOOPS      ***
+% (from algpseudocode.sty)
+		\algdef{SE}[WHILE]{While}{EndWhile}[1]
+			{\printandpush\algorithmicwhile\ #1\ \algorithmicdo}
+			{\popandprint\algorithmicend\ \algorithmicwhile}%
+		\algdef{SE}[FOR]{For}{EndFor}[1]
+			{\printandpush\algorithmicfor\ #1\ \algorithmicdo}
+			{\popandprint\algorithmicend\ \algorithmicfor}%
+		\algdef{S}[FOR]{ForAll}[1]
+			{\printindent\algorithmicforall\ #1\ \algorithmicdo}%
+		\algdef{SE}[LOOP]{Loop}{EndLoop}
+			{\printandpush\algorithmicloop}
+			{\popandprint\algorithmicend\ \algorithmicloop}%
+		\algdef{SE}[REPEAT]{Repeat}{Until}
+			{\printandpush\algorithmicrepeat}[1]
+			{\popandprint\algorithmicuntil\ #1}%
+		\algdef{SE}[IF]{If}{EndIf}[1]
+			{\printandpush\algorithmicif\ #1\ \algorithmicthen}
+			{\popandprint\algorithmicend\ \algorithmicif}%
+		\algdef{C}[IF]{IF}{ElsIf}[1]
+			{\popandprint\pushindent\algorithmicelse\ \algorithmicif\ #1\ \algorithmicthen}%
+		\algdef{Ce}[ELSE]{IF}{Else}{EndIf}
+			{\popandprint\pushindent\algorithmicelse}%
+		\algdef{SE}[PROCEDURE]{Procedure}{EndProcedure}[2]
+			{\printandpush\algorithmicprocedure\ \textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
+			{\popandprint\algorithmicend\ \algorithmicprocedure}%
+		\algdef{SE}[FUNCTION]{Function}{EndFunction}[2]
+			{\printandpush\algorithmicfunction\ \textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
+			{\popandprint\algorithmicend\ \algorithmicfunction}%
+	\makeatother
+
+\begin{document}
+
+\begin{algorithm}
+	\caption{Euclid’s algorithm}\label{euclid}
+	\begin{algorithmic}[1]
+		\Procedure{Euclid}{$a,b$} \Comment{The g.c.d.\ of a and b}
+			\LState $r\gets a\bmod b$
+			\While{$r\not=0$} \Comment{We have the answer if r is 0}
+				\LState $a\gets b$
+				\LState $b\gets r$
+				\LState $r\gets a\bmod b$
+			\EndWhile\label{euclidendwhile}
+			\LState \Return $b$ \Comment{The gcd is b}
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+\end{document}

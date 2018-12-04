@@ -1,0 +1,33 @@
+
+\documentclass{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{ucs}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{forest}
+\useforestlibrary{linguistics}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{forest}
+    for tree = {
+        sn edges,
+        grow'=0,
+        l=2.5cm,
+        s sep=0.2cm,
+        anchor=west,
+        child anchor=west}
+    [[O[R[T[U] {\draw () ++(3.5em,0) node{$\longrightarrow$ ORTU} ++(4em,0) node{$\newmoon$};}][U[T] {\draw () ++(3.5em,0) node{$\longrightarrow$ ORUT} ++(4em,0) node{$\newmoon$};}]][T[R[U] {\draw () ++(3.5em,0) node{$\longrightarrow$ OTRU} ++(4em,0) node{$\newmoon$};}][U[R] {\draw () ++(3.5em,0) node{$\longrightarrow$ OTUR} ++(4em,0) node{$\newmoon$};}]][U[R[T] {\draw () ++(3.5em,0) node{$\longrightarrow$ OURT} ++(4em,0) node{$\newmoon$};}][T[R] {\draw () ++(3.5em,0) node{$\longrightarrow$ OUTR} ++(4em,0) node{$\newmoon$};}]]][R[O[T[U] {\draw () ++(3.5em,0) node{$\longrightarrow$ ROTU} ++(4em,0) node{$\blacktriangle$};}][U[T] {\draw () ++(3.5em,0) node{$\longrightarrow$ ROUT} ++(4em,0) node{$\blacktriangle$};}]][T[O[U] {\draw () ++(3.5em,0) node{$\longrightarrow$ RTOU} ++(4em,0) node{$\blacktriangle$};}][U[O] {\draw () ++(3.5em,0) node{$\longrightarrow$ RTUO} ++(4em,0) node{$\blacktriangle$};}]][U[O[T] {\draw () ++(3.5em,0) node{$\longrightarrow$ RUOT} ++(4em,0) node{$\blacktriangle$};}][T[O] {\draw () ++(3.5em,0) node{$\longrightarrow$ RUTO} ++(4em,0) node{$\blacktriangle$};}]]][T[O[R[U] {\draw () ++(3.5em,0) node{$\longrightarrow$ TORU} ;}][U[R] {\draw () ++(3.5em,0) node{$\longrightarrow$ TOUR} ++(4em,0) node{$\blacksquare$};}]][R[O[U] {\draw () ++(3.5em,0) node{$\longrightarrow$ TROU} ++(4em,0) node{$\blacksquare$};}][U[O] {\draw () ++(3.5em,0) node{$\longrightarrow$ TRUO} ;}]][U[O[R] {\draw () ++(3.5em,0) node{$\longrightarrow$ TUOR} ;}][R[O] {\draw () ++(3.5em,0) node{$\longrightarrow$ TURO} ;}]]][U[O[R[T] {\draw () ++(3.5em,0) node{$\longrightarrow$ UORT} ++(4em,0) node{$\newmoon$};}][T[R] {\draw () ++(3.5em,0) node{$\longrightarrow$ UOTR} ++(4em,0) node{$\newmoon$};}]][R[O[T] {\draw () ++(3.5em,0) node{$\longrightarrow$ UROT} ++(4em,0) node{$\newmoon$};}][T[O] {\draw () ++(3.5em,0) node{$\longrightarrow$ URTO} ++(4em,0) node{$\newmoon$};}]][T[O[R] {\draw () ++(3.5em,0) node{$\longrightarrow$ UTOR} ++(4em,0) node{$\newmoon$};}][R[O] {\draw () ++(3.5em,0) node{$\longrightarrow$ UTRO} ++(4em,0) node{$\newmoon$};}]]]]
+\end{forest}
+
+
+\subsubsection*{LÉGENDE}
+
+$\blacksquare$ : le mot est dans le dictionnaire français.
+
+\noindent $\blacktriangle$ : le mot commence par "R".
+
+\noindent $\newmoon$ : le mot commence par une voyelle, soit ici par "O" ou "U".
+
+\end{document}

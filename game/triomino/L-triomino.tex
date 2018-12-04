@@ -1,0 +1,32 @@
+% Source : http://tex.stackexchange.com/questions/71365/l-tromino-by-using-tables-with-zero-padding
+
+\documentclass{article}
+	\usepackage{array,amssymb,tikz,graphicx}
+
+	\newcommand{\Ltromino}{%
+	\scalebox{.6}{%
+		\begin{tabular}{|c|c}\cline{1-1}
+			& \\\hline
+			& \multicolumn{1}{c|}{} \\\hline
+		\end{tabular}}
+	}
+
+	\newcommand{\LTromino}{%
+		\begin{tikzpicture}[scale=.5]
+			\draw[thick] (0,0) -- (1,0) -- (1,.5) -- (0,.5) -- cycle;
+			\draw[thick] (0,.5) -- (0,1) -- (.5,1) -- (.5,0);
+		\end{tikzpicture}
+	}
+
+
+\begin{document}
+
+Using \verb|tabular|:
+\Ltromino
+
+Compare the size with that of \verb|\square| : $\square$
+
+Using \verb|TikZ|:
+\LTromino
+
+\end{document}

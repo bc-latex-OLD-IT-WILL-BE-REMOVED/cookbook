@@ -1,0 +1,166 @@
+% << WARNING : >> use Xelatex compilation.
+
+% Source : http://forum.mathematex.net/latex-f6/dessiner-un-de-a-plat-en-forme-de-croix-t12462-20.html#p120914
+
+\documentclass[10pt]{article}
+	\usepackage[T1]{fontenc}
+	\usepackage{xstring}
+	\usepackage{pstricks}
+	\usepackage[frenchb]{babel}
+
+	\makeatletter
+		\def\name@env{dice}
+		\newif\if@display@frame
+		\newcommand\calc@maxcol[1]{%
+			\def\max@col{0}%
+			\def\remain@body{#1\\}%
+			\loop
+				\StrBefore\remain@body{\noexpand\\}[\current@line]%
+				\StrCount{\current@line&}&[\tmp@col]%
+				\ifnum\tmp@col>\max@col\let\max@col\tmp@col\fi
+				\StrBehind\remain@body{\noexpand\\}[\remain@body]%
+				\unless\ifx\remain@body\@empty
+			\repeat
+		}
+
+		\long\def\get@body@tab#1\end{%
+			\expandafter\def\expandafter\body@tab\expandafter{\body@tab#1}\test@end@body
+		}
+
+		\newcommand\test@end@body[1]{%
+			\def\temp@{#1}%
+			\ifx\temp@\name@env
+				\def\temp@{\end{#1}}%
+				\expandafter\temp@
+			\else
+				\expandafter\def\expandafter\body@tab\expandafter{\body@tab\end{#1}}%
+				\expandafter\get@body@tab
+			\fi
+		}
+
+		\newcommand\dice@grab@arg[2][]{%
+			\let\body@tab\@empty
+			\edef\temp@{{framearc=0.2\ifx\@empy#1\@empty\else,#1\fi}}\expandafter\psset\temp@
+			\def\dice@arg{#2}%
+			\get@body@tab
+		}
+
+		\newenvironment{dice}{%
+			\expandarg
+			\@makeother\!%
+			\dice@grab@arg
+		}%
+		{%
+			\unless \ifx\@body@tab\@empty
+				\IfEndWith\body@tab{\noexpand\\ }%
+				{\StrGobbleRight\body@tab2[\body@tab]}%
+				{\IfEndWith\body@tab{\noexpand\\}{\StrGobbleRight\body@tab1[\body@tab]}\relax}%
+				\expandafter\calc@maxcol\expandafter{\body@tab}%
+				\edef\tab@preamble{{*{\max@col}{c}}}%
+				\StrSubstitute{\expandafter\cell@start\body@tab\cell@end}&{\noexpand\cell@end&\cell@start}[\body@tab]%
+				\StrSubstitute\body@tab{\noexpand\\}{\noexpand\cell@end\\\cell@start}[\body@tab]%
+				\def\arraystretch{0}\tabcolsep\z@
+				\expandafter\tabular\tab@preamble\body@tab\endtabular
+			\fi
+		}
+
+		\def\cell@start#1\cell@end{%
+			\StrDel{\noexpand#1}\space[\cell@content]%
+			\unless\ifx\@empty\cell@content
+			\IfBeginWith\cell@content[%
+				{\StrBetween\cell@content[][\opt@color]%
+				\StrBehind\cell@content][\cell@content]}%
+				{\let\opt@color\@empty}%
+				\pspicture(1,1)%
+					\if @\expandafter\expandafter\expandafter\noexpand\expandafter\@car\cell@content\@nil
+						\psframe[linestyle=none,fillstyle=none](0,0)(1,1)%
+						\rput[c](0.5,0.5){\hbox to \z@{\hss\dice@arg\expandafter\@gobble\cell@content\hss}}%
+					\else
+						\edef\opt@color{\unless\ifx\opt@color\@empty[fillstyle=solid,fillcolor=\opt@color]\fi}%
+						\expandafter\psframe\opt@color(0,0)(1,1)%
+						\rput[c](0.5,0.5){\hbox to \z@{\hss\dice@arg\cell@content\hss}}%
+					\fi
+				\endpspicture
+			\fi
+		}
+	\makeatother
+
+\begin{document}
+Un dé :
+\begin{dice}{}
+	    &  1              \\
+	2  &  3  &  5  &  4  \\
+	    &  6
+\end{dice}
+
+\medskip
+
+Un autre :
+\begin{dice}{\Large\bfseries\color{red}}
+	[gray]1                                           \\
+	[blue]2  &  [green]3  &  [yellow]5  &  [pink]4    \\
+	         &            &             &  [orange]6  \\
+\end{dice}
+
+Un dernier :
+\begin{dice}[
+	unit=0.75cm,
+	linewidth=0.6pt,
+	linecolor=blue,
+	framearc=0.4
+]{\bfseries}
+	[pink]5  &  [gray]1                                \\
+	         &  [blue!50]3                             \\
+	         &  [green!60]6  &  [orange!70!green!80]2  \\
+	         &               &  [green!90!blue!30]4
+\end{dice}
+
+\medskip
+
+\LaTeX{} mangez-en :
+\begin{dice}[
+	framearc=0,
+	dimen=middle,
+	unit=0.5cm
+]{\bfseries}
+	   &  M                    \\
+	L  &  A  &  T  &  E  &  X  \\
+	   &  N                    \\
+	   &  G                    \\
+	   &  E  &  N              \\
+	   &  Z
+\end{dice}
+\qquad
+\begin{dice}[
+	framearc=0,
+	dimen=middle,
+	unit=0.75cm,
+	fillstyle=solid,
+	fillcolor=blue!66
+]{\bfseries}
+	   &  M                    \\
+	L  &  A  &  T  &  E  &  X  \\
+	   &  N                    \\
+	   &  G                    \\
+	   &  E  &  N              \\
+	   &  Z
+\end{dice}
+
+Une grille comme dans le jeu Slam : 
+\begin{dice}[
+	framearc=0,
+	dimen=middle,
+	unit=0.75cm,
+	fillstyle=solid,
+	fillcolor=blue!66
+]{\bfseries}
+	    &     &  @1                  \\
+	    &     &  M                   \\
+	@2  &  L  &  A  &  T  &  E  &  X \\
+	    &     &  N                   \\
+	    &     &  G                   \\
+	    &     &  E  &  N  &  @3      \\
+	    &     &  Z
+\end{dice}
+
+\end{document}
